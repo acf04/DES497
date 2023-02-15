@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>project_zero</title>
+  <link rel="stylesheet" type="text/css" href="res/global.css">
+  <link rel="icon" href="res/favicon.ico">
+  <style>
+body{background:#000; color:#666; font-family:'montserrat','Arial','Helvetica','Roboto',sans-serif;}
+div.col{position:fixed; top:0; bottom:0; overflow:hidden;}
+div.inner{position:absolute; left:0; right:0; top:0; min-height:100vh; transition: all 1s;}
+
+div.col p{display:block; text-align:center; white-space:nowrap; font-size:2vw; text-transform:uppercase;
+  transition: all 1s;
+}
+div.col p.sel{color:#fff;}
+  </style>
+  <script src="res/jquery.js"></script>
+  <script>
+var h = 0;
+var m = 0;
+$(document).ready(function(){
+  var col = $('.col');
+  var step = 100.0/col.length;
+  col.each(function(i,item){
+    $(item).css({'left' : (i*step)+'%','width':step+'%'});
+  });
+  setInterval(function(){
+    h = $('p').height();
+    m = $(window).height()/2-(h/2);
+    col.each(function(i,item){
+      var container = $(item).find('.inner');
+      var ch  = container.children();
+      var max = ch.length-1;
+      var sel = Math.floor(Math.random() * max) + 1;
+      ch.removeClass('sel');
+      var selp = $(ch[sel-1]);
+      selp.addClass('sel');
+      var num = (-sel*h)+m;
+      console.log(-sel*h);
+      container.css({top:num+'px'})
+    });
+  },6000);
+});
+$(window).resize(function(){
+  h = $('p').height();
+  m = $(window).height()/2-(h/2);
+})
+  </script>
+</head>
+<body>
+  <div class="col"><div class="inner">
+    <p>the dog</p>
+    <p>the musician</p>
+    <p>an old lady</p>
+    <p>a professor</p>
+    <p>the author</p>
+    <p>the designer</p>
+    <p>a mountain lion</p>
+    <p>the journalist</p>
+    <p>a celebrity</p>
+    <p>the scholar</p>
+    <p>the student</p>
+    <p>an explorer</p>
+    <p>the photographer</p>
+    <p>a farmer</p>
+    <p>harry potter</p>
+    <p>a celebrity</p>
+    <p>an actor</p>
+    <p>a panda</p>
+    <p>the gorilla</p>
+    <p>the basketball player</p>
+    <p>the team</p>
+    <p>the class</p>
+    <p>the painter</p>
+    <p>the president</p>
+    <p>a referee</p>
+    <p>a student</p>
+    <p>albert einstein</p>
+    <p>an elephant</p>
+    <p>a nurse</p>
+    <p>an octopus</p>
+    <p>the pilot</p>
+    <p>an employee</p>
+    <p>ariana grande</p>
+    <p>the barista</p>
+    <p>the entrepreneuer</p>
+    <p>a clown</p>
+    <p>the chef</p>
+    <p>a cowboy</p>
+    <p>the surfer</p>
+    <p>the baker</p>
+  </div></div>
+
+  <div class="col"><div class="inner">
+    <p>drove</p>
+    <p>lived in</p>
+    <p>attended</p>
+    <p>stole</p>
+    <p>ate</p>
+    <p>drew</p>
+    <p>painted</p>
+    <p>opened</p>
+    <p>bought</p>
+    <p>broke</p>
+    <p>entered</p>
+    <p>invented</p>
+    <p>ran over</p>
+    <p>taught</p>
+    <p>yelled at</p>
+    <p>hates</p>
+    <p>noticed</p>
+    <p>caught</p>
+    <p>held</p>
+    <p>constructed</p>
+    <p>designed</p>
+    <p>traveled to</p>
+    <p>visited</p>
+    <p>exited</p>
+    <p>left</p>
+    <p>walked on</p>
+    <p>texted</p>
+    <p>played</p>
+    <p>sniffed</p>
+    <p>ruled</p>
+    <p>tested</p>
+    <p>sliped on</p>
+    <p>loves</p>
+    <p>flew</p>
+    <p>flipped</p>
+    <p>swam in</p>
+    <p>read</p>
+    <p>slept on</p>
+    <p>tripped over</p>
+    <p>ordered</p>
+  </div></div>
+
+  <div class="col"><div class="inner">
+    <p>the car</p>
+    <p>the moon</p>
+    <p>a shoe</p>
+    <p>the room</p>
+    <p>a yacht</p>
+    <p>a museum</p>
+    <p>rihanna</p>
+    <p>the guitar</p>
+    <p>the pillow</p>
+    <p>a bed</p>
+    <p>the farm</p>
+    <p>a big white house</p>
+    <p>the game</p>
+    <p>bill nye</p>
+    <p>the grass</p>
+    <p>a picture</p>
+    <p>new york city</p>
+    <p>a banana peel</p>
+    <p>disneyland</p>
+    <p>europe</p>
+    <p>the airplane</p>
+    <p>the computer</p>
+    <p>the empire state building</p>
+    <p>a truck</p>
+    <p>the ocean</p>
+    <p>the hamburger</p>
+    <p>a bowl</p>
+    <p>the newspaper</p>
+    <p>the drums</p>
+    <p>a monkey</p>
+    <p>the country</p>
+    <p>the untied states</p>
+    <p>a baloon</p>
+    <p>a couch</p>
+    <p>the hospital</p>
+    <p>the doctor</p>
+    <p>a mirror</p>
+    <p>a hammer</p>
+    <p>the taxi</p>
+    <p>a coffee</p>
+  </div></div>
+</div>
+
+</body>
+</html>
