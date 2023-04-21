@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>blah</title>
+    <style>
+      body{margin:0; padding:0;}
+      canvas{display:block;}
+    </style>
+    <script src="res/jquery.js"></script>
+    <script src="res/ball.js"></script>
+    <script>
+ var ctx;
+ var canvas;
+ var numBalls = 12;
+ var spring = 0.05;
+ var gravity = 0.03;
+ var friction = -0.9;
+ var balls = [];
+ var width;
+ var height;
+
+ $(document).ready(function(){
+   canvas = document.getElementById('scr');
+   ctx = canvas.getContext('2d');
+   width=canvas.width;
+   height=canvas.height;
+   updateCanvas();
+
+
+   for(i = 0; i < numBalls; i++)
+   {
+     balls.push(new Ball(Math.random()*width, Math.random()*height, (Math.random()*40)+30, i, balls));
+   }
+
+   $(window).resize(function(){
+      updateCanvas();
+   });
+console.log(balls);
+
+   //setInterval(draw,2000);
+ });
+
+ function updateCanvas()
+ {
+   canvas.height = window.innerHeight;
+   canvas.width = window.innerWidth;
+   ctx.fillStyle = '#333';
+   ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+   // Draw the ellipse
+
+
+
+
+ }
+
+ function draw()
+ {
+   //ctx.fillStyle = '#333';
+   //ctx.fillRect(0, 0, canvas.width, canvas.height);
+   balls[0].collide();
+   balls[0].move();
+   balls[0].display();
+   balls[1].collide();
+   balls[1].move();
+   balls[1].display();
+   balls[2].collide();
+   balls[2].move();
+   balls[2].display();
+
+  /*for(i = 0; i < numBalls; i++)
+  {
+    balls[0].collide();
+    balls[0].move();
+    balls[0].display();
+  }*/
+ }
+
+    </script>
+  </head>
+  <body>
+
+<canvas id="scr"></canvas>
+
+  </body>
+</html>
