@@ -1,86 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>blah</title>
+    <title>Blah, Blah, Bubbles</title>
+      <link rel="icon" href="res/favicon.svg" type="image/svg+xml">
     <style>
-      body{margin:0; padding:0;}
+      body{margin:0; padding:0; .text {
+   overflow: hidden;
+   display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+           line-clamp: 2;
+   -webkit-box-orient: vertical;}
+}
       canvas{display:block;}
+      div.speech{position:fixed; bottom:50px; left:100px; right:100px; color:#fff; text-align:center;
+      font-size:3vw; z-index:100000;font-family:'Poppins','Open Sans','Arial','Helvetica','Roboto', sans-serif;}
     </style>
     <script src="res/jquery.js"></script>
-    <script src="res/ball.js"></script>
-    <script>
- var ctx;
- var canvas;
- var numBalls = 12;
- var spring = 0.05;
- var gravity = 0.03;
- var friction = -0.9;
- var balls = [];
- var width;
- var height;
-
- $(document).ready(function(){
-   canvas = document.getElementById('scr');
-   ctx = canvas.getContext('2d');
-   width=canvas.width;
-   height=canvas.height;
-   updateCanvas();
-
-
-   for(i = 0; i < numBalls; i++)
-   {
-     balls.push(new Ball(Math.random()*width, Math.random()*height, (Math.random()*40)+30, i, balls));
-   }
-
-   $(window).resize(function(){
-      updateCanvas();
-   });
-console.log(balls);
-
-   //setInterval(draw,2000);
- });
-
- function updateCanvas()
- {
-   canvas.height = window.innerHeight;
-   canvas.width = window.innerWidth;
-   ctx.fillStyle = '#333';
-   ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-   // Draw the ellipse
-
-
-
-
- }
-
- function draw()
- {
-   //ctx.fillStyle = '#333';
-   //ctx.fillRect(0, 0, canvas.width, canvas.height);
-   balls[0].collide();
-   balls[0].move();
-   balls[0].display();
-   balls[1].collide();
-   balls[1].move();
-   balls[1].display();
-   balls[2].collide();
-   balls[2].move();
-   balls[2].display();
-
-  /*for(i = 0; i < numBalls; i++)
-  {
-    balls[0].collide();
-    balls[0].move();
-    balls[0].display();
-  }*/
- }
-
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;500;600&display=swap" rel="stylesheet">
   </head>
   <body>
+  <script src="res/matter.min.js"></script>
+<script>
+// module aliases
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    Runner = Matter.Runner,
+    Bodies = Matter.Bodies,
+    Composite = Matter.Composite;
 
-<canvas id="scr"></canvas>
+// create an engine
+var engine = Engine.create();
+
+// create a renderer
+var render = Render.create({
+    element: document.body,
+    engine: engine
+});
+
+// create two boxes and a ground
+//var boxA = Bodies.rectangle(400, 200, 80, 80);
+//var boxB = Bodies.rectangle(450, 50, 80, 80);
+var ground = Bodies.rectangle(400, 610, 100, 450, { isStatic: true });
+
+// add all of the bodies to the world
+Composite.add(engine.world, ground);
+
+// run the renderer
+Render.run(render);
+
+// create runner
+var runner = Runner.create();
+
+// run the engine
+Runner.run(runner, engine);
+
+/*auido start*/
+
+var silence = true;
+  function start(){
+                var r = document.getElementById("output");
+            if("webkitSpeechRecognition" in window){
+                var speechRecognizer = new webkitSpeechRecognition();
+                speechRecognizer.continuous = true;
+                speechRecognizer.interimResults = true;
+                speechRecognizer.lang = "en-US";
+                speechRecognizer.start();
+
+                var finalTranscripts = "";
+                speechRecognizer.onresult = function(event){
+                    var interimTranscripts = "";
+                    var poetryTimer;
+                    for(var i=event.resultIndex; i<event.results.length; i++){
+                        var transcript = event.results[i][0].transcript;
+                        console.log(transcript.length);
+                        var ball = Bodies.circle($(window).width()/2,100,transcript.length);
+                        Composite.add(engine.world,ball);
+                        var balls = Composite.allBodies(engine.world);
+                        $(balls).each(function(i,item){
+                          if(item.position.y > 3000)
+                          {
+                            Composite.remove(engine.world,item);
+                          }
+                        });
+
+                        transcript.replace("\n", "<br>");
+                        $('#speech').text(transcript);
+                        /*if(event.results[i].isFinal){
+                            finalTranscripts = transcript;
+                        }
+                        else{
+                            interimTranscripts += transcript;
+                        }
+
+                        if(interimTranscripts == '')
+                        {
+
+                        }
+                        else
+                        {
+                          console.log('Text has changed');
+                          r.innerHTML =  interimTranscripts ;
+                          clearTimeout(poetryTimer);
+
+                        }*/
+                    }
+                };
+                speechRecognizer.onerror = function(event){
+                };
+            }
+            else{
+                r.innerHTML = "Your browser does not support that.";
+            }
+            }
+
+      start();
+
+
+/*audio end*/
+
+
+$(document).ready(function(){
+  adjust();
+});
+adjust();
+
+
+$(document).click(function(e){
+  console.log(e);
+  var ball = Bodies.circle(e.clientX,e.clientY,(Math.random()*50)+5);
+  Composite.add(engine.world,ball);
+});
+
+function adjust()
+{
+  console.log(render.canvas);
+  render.canvas.width = $(window).width();
+  render.canvas.height = $(window).height();
+  let buf = ground.vertices;
+  buf[0].x=50;
+  buf[1].x=render.canvas.width-100;
+  buf[2].x=render.canvas.width-100;
+  buf[3].x=50
+  Matter.Body.setVertices(ground,buf);
+  Matter.Body.setPosition(ground, { x: render.canvas.width/2, y: render.canvas.height-20 });
+}
+
+$(window).resize(function(){
+  adjust();
+});
+
+</script>
+
+<div id="speech" class="speech"></div>
 
   </body>
 </html>
